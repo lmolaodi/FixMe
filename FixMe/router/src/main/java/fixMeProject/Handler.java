@@ -12,28 +12,27 @@ public class Handler extends Thread{
     private SocketChannel socket;
 	private List<String> messages;
 	private String id;
-	private String componentType;
+	private String broker;
     private boolean Client;
     
-    public Handler(SocketChannel socket, int clientListSize ,List<String> messages, int port, String id, String componentType){
+    public Handler(SocketChannel socket, int clientListSize ,List<String> messages, int port, String id, String broker){
 		this.socket = socket;
 		this.messages = messages;
 		this.id = id;
 		this.Client = true;
-		this.componentType = componentType;
+		this.broker = broker;
 		sendMessage(id + " ");
     }
     
     public void run() {
 		try {
 			while(this.Client){
-				if ((socket!= null) && (socket.isOpen()) && this.Client) {
-
+				if ((socket != null) && (socket.isOpen()) && this.Client) {
+					
 					ByteBuffer buffer = ByteBuffer.allocate(1024);
 					socket.read(buffer);
 					String clientMsg =  new String(buffer.array()).trim();
-
-				System.out.println("Message from : " + componentType + " ID : " + this.id + "  [ " + clientMsg +"]");
+					System.out.println("Message from : " + broker + " ID : " + this.id + "  \n[ " + clientMsg +"]");
 					
 					if (this.Client && !clientMsg.isEmpty()) {
 						messages.add(clientMsg);
@@ -44,7 +43,7 @@ public class Handler extends Thread{
 				}
 			}
 		} catch (IOException e){
-			System.out.println("Disconnected from " + componentType + " ID : " + this.id);
+			System.out.println("Disconnected from " + broker + " ID : " + this.id);
 			System.out.println("Server Running...");
 		} 	
     }
@@ -56,11 +55,11 @@ public class Handler extends Thread{
 				msgBuffer.wrap(message.getBytes());
 				socket.write(msgBuffer.wrap(message.getBytes())); 
 			} else {
-				System.out.println(getClass().getSimpleName()+"Closed : " + Client);
+				System.out.println(getClass().getSimpleName() + "Closed : " + Client);
 			}
 		}
 		catch (IOException e){
-			System.out.println(" Market closed or no available products.....");
+			System.out.println(" Market closed or no products available.....");
 		}
 	}
 

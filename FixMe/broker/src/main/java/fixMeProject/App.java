@@ -12,42 +12,43 @@ import java.time.ZonedDateTime;
 public class App {
 
    private static BufferedReader input = null;
-	protected SocketChannel client;
-	protected ArrayList<String> messages = new ArrayList<>();
+   protected SocketChannel client;
+   protected ArrayList<String> messages = new ArrayList<>();
    public static String ID ="";
    public static final String[] products = {"The Gold Leaf Bread", "Roquefort and Almond Sourdough bread", "Brioche", "Baguette", "Brown Bread", "White Bread"};
    public static final int[] inventory = {10, 20, 30, 40,50, 60};
    public static int orderID = 0;
    public static void main(String[] args) throws Exception{
-      
-      InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 5000);
-      Selector selector = Selector.open();
-      SocketChannel sc = SocketChannel.open();
-      sc.configureBlocking(false);
-      sc.connect(addr);
-      sc.register(selector, SelectionKey.OP_CONNECT |
-                SelectionKey.OP_READ | SelectionKey.
-                OP_WRITE);
-        input = new BufferedReader(new
-                InputStreamReader(System.in));
-        while (true) {
-            if (selector.select() > 0) {
-                Boolean doneStatus = processReadySet
-                        (selector.selectedKeys());
-                if (doneStatus) {
-                    break;
-                }
-            }
-        }
-        sc.close();
-   }
+	   
+	InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 5000);
+    Selector selector = Selector.open();
+	SocketChannel sc = SocketChannel.open();
+	
+    sc.configureBlocking(false);
+    sc.connect(addr);
+	sc.register(selector, SelectionKey.OP_CONNECT | SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+	input = new BufferedReader(new InputStreamReader(System.in));
+	while (true) {
+		if (selector.select() > 0) {
+			Boolean doneStatus = processReadySet(selector.selectedKeys());
+			if (doneStatus) {
+				break;
+			}
+		}
+	}
+	sc.close();
+}
 
    public static String setFixNotation(int price, int quantity, int buyOrSell)
 {
 	String fixNotation = "";
 	ZonedDateTime time= ZonedDateTime.now(ZoneOffset.UTC);
-	fixNotation = "35=D|49="+ID+"|56=100001|52="+time+"|55=D|54="+buyOrSell+"|60=1|38="+quantity+"|40=1|44="+price+"|39=1";
-	fixNotation = "8=FIX.4|9="+fixNotation.getBytes().length+"|11="+orderID+"|21=1|"+fixNotation+"|10="+getChecksum(ByteBuffer.wrap(fixNotation.getBytes()), fixNotation.length())+"|";
+	fixNotation = " 35=D | 49=" + ID + " | 56=100001 | 52=" + time + " | 55=D | 54=" + buyOrSell + 
+	" | 60=1 | 38=" + quantity + " | 40=1 | 44=" + price + "| 39=1";
+	
+	fixNotation = " 8=FIX.4 | 9=" + fixNotation.getBytes().length + " | 11=" + orderID +
+	" | 21=1 |" + fixNotation + " | 10=" + getChecksum(ByteBuffer.wrap(fixNotation.getBytes()), fixNotation.length()) + " |";
 	return fixNotation;
 }
 
