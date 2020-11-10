@@ -31,8 +31,8 @@ public class App {
 	input = new BufferedReader(new InputStreamReader(System.in));
 	while (true) {
 		if (selector.select() > 0) {
-			Boolean doneStatus = processReadySet(selector.selectedKeys());
-			if (doneStatus) {
+			Boolean Status = processReadySet(selector.selectedKeys());
+			if (Status) {
 				break;
 			}
 		}
@@ -54,30 +54,31 @@ public class App {
 
 	public static String getChecksum(ByteBuffer a, int b)
 	{
-		int checksum = 0;
+		int sum = 0;
 			for (int i = 0; i < b; i++) {
-				checksum += a.get(i);
+				sum += a.get(i);
 			}
-			checksum = checksum%256;
-			if(checksum < 10)
+			sum = sum % 256;
+			if(sum < 10)
 			{
-				return "00"+checksum;
+				return "00" + sum;
 			}
-			else if(checksum < 100)
+			else if(sum < 100)
 			{
-				return "0"+checksum;
+				return "0" + sum;
 			}
 			else
 			{
-				return checksum % 256+"";
+				return sum % 256 + "";
 			}
 	}
 	
-	public static Boolean processReadySet(Set readySet)
-            throws Exception {
-        SelectionKey key = null;
+	public static Boolean processReadySet(Set readySet) throws Exception {
+		
+		SelectionKey key = null;
         Iterator iterator = null;
-        iterator = readySet.iterator();
+		iterator = readySet.iterator();
+		
         while (iterator.hasNext()) {
             key = (SelectionKey) iterator.next();
             iterator.remove();
@@ -97,7 +98,7 @@ public class App {
            if(ID.isEmpty())
 			{
 				ID = result;
-				System.out.println("Assigned ID: " + "[ " + ID +" ]");
+				System.out.println("Assigned Broker ID: " + "[ " + ID +" ]");
 				outOptions(sc,bb );	
 			}
 			else
@@ -129,33 +130,33 @@ public class App {
 	
 	public static void printInstruments()
 	{
-		System.out.println("LIST OF AVAILABLE BREADS TO TRADE");
+		System.out.println("LIST OF AVAILABLE BREADS TO TRADE\n");
 		for(int i = 0; i< products.length;i++)
 		{
-			System.out.println("index" + i + " : [ " + products[i] + " ]");
+			System.out.println("index" + i + " : [ " + products[i] + " ]\n");
 		}
 	}
 	
 	public static void outOptions( SocketChannel sc,ByteBuffer bb )
 	{
 		  try{
-			System.out.println("OPTIONS [ 'BUY' OR 'SELL']\n");
+			System.out.println("Please select Option [ 'BUY' OR 'SELL' ]");
             String msg = input.readLine();
 			int quantity = 0;
 			int price = 0;
 			String item = "";
 			while(true)
 			{
-				
+				System.out.println("Please select Option [ 'BUY' OR 'SELL' ]");
 				if(msg.equalsIgnoreCase("buy") || msg.equalsIgnoreCase("sell"))
 				{
 					break;
 				}
-				System.out.println("Please select Option [ 'BUY' OR 'SELL' ]");
 				msg = input.readLine();
 			}
+
 			printInstruments();
-			System.out.println("OPTIONS [ Enter index number of the product you would like to buy or sell");
+			System.out.println("[ Enter index number of the product you would like to buy or sell \n]");
 			item = getInstrument();
 			int index = getIndex(item);
 			orderID = index;
@@ -211,13 +212,12 @@ public class App {
 	
 	public static String getInstrument()
 	{
-		
 		try
 		{	
 		    int ret =6;
 			while(true)
 			{
-				System.out.println("Enter Instrument Index [0 - 5]");
+				System.out.println("Enter Instrument Index [0 -5]");
 			    ret = Integer.parseInt(input.readLine());
 				if(ret < 6)
 				{
@@ -230,14 +230,14 @@ public class App {
 		{
 			System.out.println("ERROR : Requested an integer, received something else");
 		}
-		return "yeet";
+		return "";
 	}
 	
 	public static int getPrice()
 	{
 		try
 		{	
-			System.out.println("At what price [1 - 10000]");
+			System.out.println("At what price [1 -10000]");
 			int ret = Integer.parseInt(input.readLine());
 			return ret;	
 		}
@@ -253,7 +253,7 @@ public class App {
 	{
 		
 		try
-		{	System.out.println("Quantity of bread [1 - 180]");
+		{	System.out.println("Quantity of bread [1 -180]");
 			int ret = Integer.parseInt(input.readLine());
 			if(cmd.equalsIgnoreCase("buy"))
 			{
@@ -269,7 +269,7 @@ public class App {
 						break;
 					}
 					System.out.println("Available inventory is less than quantity you want to sell");
-					System.out.println("Quantity of bread [1 - 180]");
+					System.out.println("Quantity of bread [1 -180]");
 			        ret = Integer.parseInt(input.readLine());
 				}
 				return ret;
@@ -277,10 +277,11 @@ public class App {
 		}
 		catch(IOException e)
 		{
-			System.out.println("yeet");
+			System.out.println("Error: Invalid Input");
 		}
 		return 0;
 	}
+	
     public static Boolean processConnect(SelectionKey key) {
         SocketChannel sc = (SocketChannel) key.channel();
         try {
