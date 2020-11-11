@@ -20,15 +20,14 @@ public class App {
                 brokerMessages = broker.getMessages();
                 if(brokerMessages.isEmpty())
                 {
-                    System.out.println("Nothing to send!...");
+                    System.out.println("No message to send!...");
                 }
                 else
                 {
                     String[] arr = brokerMessages.split("\\|");
                     String temp = "56=" + market.getID();
                     
-                    market.sendMessage(arr[0] + "|" + arr[1] + "|" + 
-                    arr[2] + "|" + arr[3] + "|" + arr[4] + "|" + arr[5]+ 
+                    market.sendMessage(arr[0] + "|" + arr[1] + "|" + arr[2] + "|" + arr[3] + "|" + arr[4] + "|" + arr[5]+ 
                     "|" + temp + "|" + arr[7] + "|" + arr[8] + "|" + arr[9] + 
                     "|" + arr[10] + "|" + arr[11] + "|" + arr[12] + "|" + "|" 
                     + arr[13] + "|" + arr[14] + "|" + arr[15] + "|");

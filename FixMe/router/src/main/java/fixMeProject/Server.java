@@ -57,7 +57,7 @@ public class Server extends Thread{
     {
         try {
             server = ServerSocketChannel.open().bind(new InetSocketAddress("127.0.0.1", port));
-            System.out.println("Client Server listerning on port: " + port);
+            System.out.println("Server listerning on port: " + port);
             String ID = setConnectionID(broker);
             this.ID = ID;
 

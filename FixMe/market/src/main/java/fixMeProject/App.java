@@ -13,7 +13,7 @@ public class App
 {
     private static BufferedReader input = null;
 	static String message = null;
-    public static final String[] instruments = {"The Gold Leaf Bread", "Roquefort and Almond Sourdough bread", "Brioche", "Baguette", "Brown Bread", "White Bread"};
+    public static final String[] products = {"The Gold Leaf Bread", "Roquefort and Almond Sourdough bread", "Brioche", "Baguette", "Brown Bread", "White Bread"};
 	public static final int[] inventory = {30, 60, 90, 120,150, 180};
     public static String ID ="";
 
@@ -32,8 +32,8 @@ public class App
         
         while (true) {
             if (selector.select() > 0) {
-                Boolean doneStatus = processReadySet(selector.selectedKeys());
-                if (doneStatus) {
+                Boolean Status = processReadySet(selector.selectedKeys());
+                if (Status) {
                     break;
                 }
             }
@@ -43,10 +43,10 @@ public class App
 
     public static void printInstruments()
 	{
-		System.out.println("LIST OF AVAILABLE BREADS TO TRADE");
-		for(int i = 0; i< instruments.length;i++)
+		System.out.println("List vailabe to trade\n");
+		for(int i = 0; i< products.length;i++)
 		{
-			System.out.println("index" + i + " : [ " + instruments[i] + " ]");
+			System.out.println("index" + i +" : [ " + products[i] + " ]");
 		}
 	}
 
@@ -90,9 +90,9 @@ public class App
 	public static String processOrder(String instrument, String fixmsg )
 	{
 		int var = 0;
-		for(int i = 0; i< instruments.length;i++)
+		for(int i = 0; i< products.length;i++)
 		{
-			if(instrument.equals(instruments[i]))
+			if(instrument.equals(products[i]))
 		    {
 				var = i;
 				break;
@@ -129,16 +129,16 @@ public class App
 		try
 		{
 			String[] arr = ret.split("#");
-			System.out.println("Message received from Server: " + "[ " + arr[1]+" ]");
+			System.out.println("Message received from Server: " + "[ " + arr[1] + " ]");
 
 			String processOrder = processOrder(arr[0], arr[1]);
 			String msg = processOrder + " " + arr[1];
 
-			System.out.println("request Handled");
+			System.out.println("Handling request");
+
 			SocketChannel sc = (SocketChannel) key.channel();
 			ByteBuffer bb = ByteBuffer.wrap(msg.getBytes());
 			sc.write(bb);
-			
 			System.out.println("request sent");
 		}
 		catch(IOException e)

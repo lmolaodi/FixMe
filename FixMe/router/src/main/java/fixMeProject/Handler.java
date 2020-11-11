@@ -37,14 +37,13 @@ public class Handler extends Thread{
 					if (this.Client && !clientMsg.isEmpty()) {
 						messages.add(clientMsg);
 					}
-					
-					buffer.flip();
-					buffer.clear();	 
+					//buffer.flip();
+					//buffer.clear();	 
 				}
 			}
 		} catch (IOException e){
-			System.out.println("Disconnected from " + broker + " ID : " + this.id);
-			System.out.println("Server Running...");
+			System.out.println("Disconnected from " + broker + "ID : " + this.id);
+			System.out.println("Server Running...\n");
 		} 	
     }
     
